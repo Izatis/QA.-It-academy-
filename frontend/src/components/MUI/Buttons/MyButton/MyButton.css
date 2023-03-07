@@ -1,0 +1,24 @@
+.myButton {
+  width: 100% !important;
+  display: flex;
+  align-items: center;
+  gap: 13.1px;
+  border-radius: 5px !important;
+  font-family: "Inter" !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  line-height: 160% !important;
+}
+.myButton:disabled {
+  transition: 0.3s !important;
+  background: #d5d5d5 !important;
+  color: #f3f3f3 !important;
+  cursor: pointer !important;
+}
+
+.myButton:hover {
+  transition: 0.3s !important;
+  border: 1px solid #838383 !important;
+  cursor: pointer !important;
+}
