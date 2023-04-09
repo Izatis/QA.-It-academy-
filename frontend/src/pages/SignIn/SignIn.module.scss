@@ -34,6 +34,7 @@
         user-select: none;
       }
     }
+
     .hide_password {
       position: absolute;
       right: 18.75px;
@@ -45,8 +46,29 @@
         cursor: pointer;
       }
     }
-    .message {
-      color: #f11515;
+
+    .error_message {
+      p {
+        font-weight: 400;
+        font-size: 15px;
+        text-transform: uppercase;
+        color: #f11515;
+        margin: 0;
+      }
+    }
+
+    .not_active {
+      height: 50px !important;
+      background: #d5d5d5 !important;
+      border-radius: 5px !important;
+      font-family: "Inter", sans-serif !important;
+      font-style: normal !important;
+      font-weight: 500 !important;
+      font-size: 16px !important;
+      line-height: 160% !important;
+      color: #f3f3f3 !important;
+      transition: 0.3s !important;
+      cursor: default;
     }
   }
 }

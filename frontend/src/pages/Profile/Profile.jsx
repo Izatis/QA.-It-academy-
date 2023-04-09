@@ -1,34 +1,35 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import s from "./Profile.module.scss";
 import cover from "../../assets/cover.png";
-import Header from "../../components/Header/Header";
-import MyButton from "../../components/MUI/Buttons/MyButton/MyButton";
 import edit from "../../assets/edit.png";
 import exit from "../../assets/exit.png";
-import Modal from "../../components/Modal/Modal";
-import axios from "axios";
-import { AddContext } from "../AddContext/AddContext";
-import Loading from "../../components/Loading/Loading";
 import { useNavigate } from "react-router-dom";
+import { AddContext } from "../AddContext/AddContext";
+
+import MyButton from "../../components/MUI/Buttons/MyButton/MyButton";
+import Modal from "../../components/Modal/Modal";
+import Loading from "../../components/Loading/Loading";
 
 const Profile = () => {
-  // Это состояние модалки
-  const [active, setActive] = useState(false);
-
-  // ------------------------------------------------------
+  // Данные пользователя
+  const { userData, setUserData } = useContext(AddContext);
 
   // Здесь я достаю состояние загрузку, (общий)
   const { isLoading } = useContext(AddContext);
-
-  const { userData } = useContext(AddContext);
 
   const navigate = useNavigate();
 
   // Выйти из аккаунта
   const signOut = () => {
-    localStorage.removeItem("token");
     navigate("/register");
+    localStorage.removeItem("token");
+    setUserData({});
   };
+
+  // ------------------------------------------------------
+
+  // Это состояние модалки
+  const [active, setActive] = useState(false);
 
   return (
     <div className={s.profile_main}>
@@ -90,11 +91,7 @@ const Profile = () => {
             <Loading />
           </div>
         )}
-        <Modal
-          active={active}
-          setActive={setActive}
-          userData={userData}
-        />
+        <Modal active={active} setActive={setActive} userData={userData} />
       </div>
     </div>
   );

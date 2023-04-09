@@ -6,12 +6,14 @@ import MyButton from "../MUI/Buttons/MyButton/MyButton";
 import { AddContext } from "../../pages/AddContext/AddContext";
 
 const Header = () => {
-  const navigate = useNavigate();
-
+  // Данные пользователя, (общий)
   const { userData } = useContext(AddContext);
+
+  const navigate = useNavigate();
 
   // Достаем токен пользовотеля
   const token = JSON.parse(localStorage.getItem("token"));
+  
   return (
     <div className={s.header_container}>
       <header>
@@ -25,7 +27,6 @@ const Header = () => {
           </Link>
         ) : (
           <div className={s.logo_text}>
-            {" "}
             <img src={logo} alt="logo" />
             <span>
               Разрабатываем и запускаем <br />

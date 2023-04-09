@@ -2,64 +2,83 @@ import React, { useContext, useState } from "react";
 import s from "./SignIn.module.scss";
 import email from "../../assets/email.png";
 import password from "../../assets/password.png";
+import eye from "../../assets/eye.png";
+import { useNavigate } from "react-router-dom";
+import { AddContext } from "../AddContext/AddContext";
+import axios from "axios";
+
 import MyInput from "../../components/MUI/MyInput/MyInput";
 import MyButton from "../../components/MUI/Buttons/MyButton/MyButton";
-import axios from "axios";
-import { AddContext } from "../AddContext/AddContext";
-import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading/Loading";
-import eye from "../../assets/eye.png";
 
 const SignIn = () => {
+  // Данные пользователя для авторизации
   const [userLogin, setUserLogin] = useState({
     email: "",
     password: "",
   });
-
-  // Это состояние скрытие пароля, (общий)
-  const { type, passwordHide } = useContext(AddContext);
-
-  // Здесь сохраняется сообщение от сервера
-  const [message, setMessage] = useState("");
 
   // Здесь я достаю состояние загрузку, (общий)
   const { isLoading, setIsLoading } = useContext(AddContext);
 
   const navigate = useNavigate();
 
-  // Отправляем post запрос и за одно проверяется пользователь и перенапраляется на профиль
-  const verifyUser = async () => {
-    setIsLoading(false);
-    try {
-      const { data } = await axios.post(
-        "http://localhost:8080/login",
-        userLogin
-      );
-      localStorage.setItem("token", JSON.stringify(data.token));
+  // Состояние - для проверки присутствие поли в инпутах
+  const [error, setError] = useState(false);
 
-      // Достаем токен пользовотеля
-      const token = JSON.parse(localStorage.getItem("token"));
+  // Состояние - сообщения ошибки для email инпута, и для сообщения ошибки от сервера
+  const [errorMessage, setErrorMessage] = useState("");
 
-      if (!!token) {
-        navigate("/");
+  // Отправляем post запрос, и за одно проверяется пользователь и перенапраляется на профиль
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (userLogin.email.length === 0 || userLogin.password.length === 0) {
+      setError(true);
+    } else {
+      // Проверка для email инпута
+      const regex = /^[A-Za-z0-9._%+-]+@(gmail\.com|mail\.ru)$/i;
+      const isValidEmail = regex.test(userLogin.email);
+      if (!isValidEmail) {
+        setErrorMessage("Разрешены только адреса Gmail или Mail.ru");
+      } else {
+        setIsLoading(false);
+        try {
+          await axios
+            .post("http://localhost:8080/login", userLogin)
+            .then((response) =>
+              localStorage.setItem("token", JSON.stringify(response.data.token))
+            );
+
+          // Достаем токен пользовотеля
+          const token = JSON.parse(localStorage.getItem("token"));
+
+          if (!!token) {
+            navigate("/");
+          }
+
+          setUserLogin({
+            email: "",
+            password: "",
+          });
+        } catch (error) {
+          setErrorMessage(error.response.data.error);
+        }
+        setIsLoading(true);
       }
-      
-      setUserLogin({
-        email: "",
-        password: "",
-      });
-    } catch (error) {
-      setMessage(error.response.data.error);
     }
-    setIsLoading(true);
   };
+
+  // ------------------------------------------------------
+
+  // Это состояние скрытие пароля, (общий)
+  const { type, passwordHide } = useContext(AddContext);
 
   return (
     <section className={s.sign_in_main}>
       {isLoading ? (
         <>
           <h1>Вход</h1>
-          <div className={s.inputs_btn}>
+          <form onSubmit={handleSubmit} className={s.inputs_btn}>
             <MyInput
               value={userLogin.email}
               onChange={(e) =>
@@ -73,13 +92,30 @@ const SignIn = () => {
               </span>
             </MyInput>
 
+            {/* Здесь проверяется присутствие поли в инпуте */}
+            {error && userLogin.email.length <= 0 ? (
+              <div className={s.error_message}>
+                <p>Введите email!</p>
+              </div>
+            ) : (
+              ""
+            )}
+
+            {/* Здесь проверяется присутствие сообщения ошибки в email*/}
+            {errorMessage && (
+              <div className={s.error_message}>
+                <p>{errorMessage}</p>
+              </div>
+            )}
+
             <MyInput
+              placeholder="Пароль"
+              type={type}
+              minLength={4}
               value={userLogin.password}
               onChange={(e) =>
                 setUserLogin({ ...userLogin, password: e.target.value })
               }
-              type={type}
-              placeholder="Пароль"
             >
               <span className={s.input_icon}>
                 <img src={password} alt={"password"} />
@@ -88,13 +124,20 @@ const SignIn = () => {
                 <img src={eye} alt="eye" />
               </span>
             </MyInput>
-            {/* Здесь проверяется присутствие сообщении от сервера */}
-            {!!message.length && <span className={s.message}>{message}</span>}
 
-            {/* Это сравнение проверяет на содержания инпутов и изменяет кнопки */}
+            {/* Здесь проверяется присутствие поли в инпуте */}
+            {error && userLogin.password.length <= 0 ? (
+              <div className={s.error_message}>
+                <p>Введите пароль!</p>
+              </div>
+            ) : (
+              ""
+            )}
+
+            {/* Это сравнение проверяет на содержания инпутов и изменяет кнопку */}
             {!!userLogin.email.length && !!userLogin.password.length ? (
               <MyButton
-                onClick={verifyUser}
+                type="submit"
                 style={{
                   height: 50,
                   background: "#000000",
@@ -104,18 +147,11 @@ const SignIn = () => {
                 Войти
               </MyButton>
             ) : (
-              <MyButton
-                disabled
-                style={{
-                  height: 50,
-                  background: "#000000",
-                  color: "#FFFFFF",
-                }}
-              >
+              <MyButton className={s.not_active} type="submit">
                 Войти
               </MyButton>
             )}
-          </div>
+          </form>
         </>
       ) : (
         <Loading />

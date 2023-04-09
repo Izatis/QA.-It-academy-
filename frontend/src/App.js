@@ -1,20 +1,24 @@
+import { useEffect, useState } from "react";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
+import { AddContext } from "./pages/AddContext/AddContext";
+import axios from "axios";
+
 import SignUp from "./pages/SignUp/SignUp";
 import SignIn from "./pages/SignIn/SignIn";
 import Profile from "./pages/Profile/Profile";
-import { AddContext } from "./pages/AddContext/AddContext";
-import { useEffect, useState } from "react";
 import Layout from "./components/Layout/Layout";
-import axios from "axios";
 
 function App() {
-  // Достаем токен пользовотеля
-  const token = JSON.parse(localStorage.getItem("token"));
-
   // Данные пользователя
   const [userData, setUserData] = useState({});
-
+  
+  // Это состояние загрузки
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Достаем токен пользовотеля
+  const token = JSON.parse(localStorage.getItem("token"));
+  
   // Отправляет get запрос
   const getUser = async () => {
     try {
@@ -30,12 +34,10 @@ function App() {
     setIsLoading(true);
   };
 
+  // Отправляет get запрос при каждом изменении localStorage
   useEffect(() => {
     getUser();
-  }, []);
-
-  // Это состояние загрузки
-  const [isLoading, setIsLoading] = useState(true);
+  }, [token]);
 
   //  Скрытие пароля
   const [type, setType] = useState("password");
@@ -50,12 +52,13 @@ function App() {
   return (
     <AddContext.Provider
       value={{
+        userData,
+        setUserData,
         isLoading,
         setIsLoading,
+        getUser,
         type,
         passwordHide,
-        getUser,
-        userData,
       }}
     >
       <Layout>
@@ -68,7 +71,7 @@ function App() {
               <Route path="/login" element={<SignIn />} />
             </>
           )}
-          <Route path="*" element={<h1 className="error">ERROR 404</h1>} />
+          <Route path="*" element={<h1 className="error_page">ERROR 404</h1>} />
         </Routes>
       </Layout>
     </AddContext.Provider>

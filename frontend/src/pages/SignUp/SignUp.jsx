@@ -3,106 +3,151 @@ import s from "./SignUp.module.scss";
 import user from "../../assets/user.png";
 import email from "../../assets/email.png";
 import password from "../../assets/password.png";
+import eye from "../../assets/eye.png";
+import { useNavigate } from "react-router-dom";
+import { AddContext } from "../AddContext/AddContext";
 import axios from "axios";
+
 import MyInput from "../../components/MUI/MyInput/MyInput";
 import MyButton from "../../components/MUI/Buttons/MyButton/MyButton";
 import Loading from "../../components/Loading/Loading";
-import { AddContext } from "../AddContext/AddContext";
-import { useNavigate } from "react-router-dom";
-import eye from "../../assets/eye.png";
 
 const SignUp = () => {
-  const [userData, setUserData] = useState({
-    // По умолчанию поставил
-    id: 1,
+  // Данные пользователя для регистрации
+  const [userRegister, setUserRegister] = useState({
     username: "test",
-    email: "test@gmail.com",
-    password: "123456",
-    avatar: "https://picsum.photos/id/1/200/200",
-    about:
-      "Я тестовый пользователь номер один. Я никогда не пропадаю между запусками api!",
+    email: "",
+    password: "123456",   
   });
-
-  // Это состояние скрытие пароля, (общий)
-  const { type, passwordHide } = useContext(AddContext);
-
-  // Здесь сохраняется сообщение от сервера
-  const [message, setMessage] = useState("");
 
   // Здесь я достаю состояние загрузку, (общий)
   const { isLoading, setIsLoading } = useContext(AddContext);
 
   const navigate = useNavigate();
 
-  // Отправляем post запрос, потом создает пользователя и перенапраляется на профиль
-  const createUser = async () => {
-    setIsLoading(false);
-    try {
-      await axios
-        .post("http://localhost:8080/register", userData)
-        .then((response) =>
-          localStorage.setItem("token", JSON.stringify(response.data.token))
-        );
+  // Состояние - для проверки присутствие поли в инпутах
+  const [error, setError] = useState(false);
 
-      // Достаем токен пользовотеля
-      const token = JSON.parse(localStorage.getItem("token"));
+  // Состояние - сообщения ошибки для email инпута, и для сообщения ошибки от сервера
+  const [errorMessage, setErrorMessage] = useState("");
 
-      if (!!token) {
-        navigate("/");
+  // Отправляем post запрос,  и за одно проверяется, потом  создает пользователя и перенапраляется на профиль
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (
+      userRegister.username.length === 0 ||
+      userRegister.email.length === 0 ||
+      userRegister.password.length === 0
+    ) {
+      setError(true);
+    } else {
+      // Проверка для email инпута
+      const regex = /^[A-Za-z0-9._%+-]+@(gmail\.com|mail\.ru)$/i;
+      const isValidEmail = regex.test(userRegister.email);
+      if (!isValidEmail) {
+        setErrorMessage("Разрешены только адреса Gmail или Mail.ru");
+      } else {
+        setIsLoading(false);
+        try {
+          await axios
+            .post("http://localhost:8080/register", userRegister)
+            .then((response) =>
+              localStorage.setItem("token", JSON.stringify(response.data.token))
+            );
+
+          // Достаем токен пользовотеля
+          const token = JSON.parse(localStorage.getItem("token"));
+
+          if (!!token) {
+            navigate("/");
+          }
+
+          setUserRegister({
+            username: "",
+            email: "",
+            password: "",
+            avatar: "",
+            about: "",
+          });
+        } catch (error) {
+          setErrorMessage(error.response.data.error);
+        }
+        setIsLoading(true);
       }
-
-      setUserData({
-        username: "",
-        email: "",
-        password: "",
-        avatar: "",
-        about: "",
-      });
-    } catch (error) {
-      setMessage(error.response.data.error);
     }
-    setIsLoading(true);
   };
+
+  // ------------------------------------------------------
+
+  // Это состояние скрытие пароля, (общий)
+  const { type, passwordHide } = useContext(AddContext);
 
   return (
     <div className={s.sign_up_main}>
       {isLoading ? (
         <>
           <h1>Регистрация</h1>
-          <form className={s.inputs_btn}>
+          <form onSubmit={handleSubmit} className={s.inputs_btn}>
             <MyInput
-              value={userData.username}
-              onChange={(e) => {
-                setUserData({ ...userData, username: e.target.value });
-              }}
               type="text"
               placeholder="Имя"
+              minLength={4}
+              value={userRegister.username}
+              onChange={(e) => {
+                setUserRegister({ ...userRegister, username: e.target.value });
+              }}
             >
               <span className={s.input_icon}>
                 <img src={user} alt={"user"} />
               </span>
             </MyInput>
 
+            {/* Здесь проверяется присутствие поли в инпуте */}
+            {error && userRegister.username.length <= 0 ? (
+              <div className={s.error_message}>
+                <p>Введите имю!</p>
+              </div>
+            ) : (
+              ""
+            )}
+
             <MyInput
-              value={userData.email}
-              onChange={(e) => {
-                setUserData({ ...userData, email: e.target.value });
-              }}
-              type="email"
               placeholder="E-mail"
+              type="email"
+              value={userRegister.email}
+              onChange={(e) => {
+                setUserRegister({ ...userRegister, email: e.target.value });
+              }}
             >
               <span className={s.input_icon}>
                 <img src={email} alt={"email"} />
               </span>
             </MyInput>
 
+            {/* Здесь проверяется присутствие поли в инпуте */}
+            {error && userRegister.email.length <= 0 ? (
+              <div className={s.error_message}>
+                <p>Введите e-mail!</p>
+              </div>
+            ) : (
+              ""
+            )}
+
+            {/* Здесь проверяется присутствие сообщения ошибки */}
+            {errorMessage && (
+              <div className={s.error_message}>
+                <p>{errorMessage}</p>
+              </div>
+            )}
+
             <MyInput
-              value={userData.password}
-              onChange={(e) => {
-                setUserData({ ...userData, password: e.target.value });
-              }}
-              type={type}
               placeholder="Пароль"
+              type={type}
+              minLength={4}
+              value={userRegister.password}
+              onChange={(e) => {
+                setUserRegister({ ...userRegister, password: e.target.value });
+              }}
             >
               <span className={s.input_icon}>
                 <img src={password} alt={"password"} />
@@ -112,15 +157,21 @@ const SignUp = () => {
               </span>
             </MyInput>
 
-            {/* Здесь проверяется присутствие сообщении от сервера */}
-            {!!message.length && <span className={s.message}>{message}</span>}
+            {/* Здесь проверяется присутствие поли в инпуте */}
+            {error && userRegister.password.length <= 0 ? (
+              <div className={s.error_message}>
+                <p>Введите пароль!</p>
+              </div>
+            ) : (
+              ""
+            )}
 
-            {/* Это сравнение проверяет на содержания инпутов и изменяет кнопки */}
-            {!!userData.username.length &&
-            !!userData.email.length &&
-            !!userData.password.length ? (
+            {/* Это сравнение проверяет на содержания инпутов и изменяет кнопку */}
+            {!!userRegister.username.length &&
+            !!userRegister.email.length &&
+            !!userRegister.password.length ? (
               <MyButton
-                onClick={createUser}
+                type="submit"
                 style={{
                   height: 50,
                   background: "#000000",
@@ -130,14 +181,7 @@ const SignUp = () => {
                 Создать аккаунт
               </MyButton>
             ) : (
-              <MyButton
-                disabled
-                style={{
-                  height: 50,
-                  background: "#000000",
-                  color: "#FFFFFF",
-                }}
-              >
+              <MyButton className={s.not_active} type="submit">
                 Создать аккаунт
               </MyButton>
             )}
