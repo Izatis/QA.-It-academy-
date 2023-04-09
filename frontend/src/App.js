@@ -1,12 +1,39 @@
 import "./App.css";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import SignUp from "./pages/SignUp/SignUp";
 import SignIn from "./pages/SignIn/SignIn";
 import Profile from "./pages/Profile/Profile";
 import { AddContext } from "./pages/AddContext/AddContext";
 import { useEffect, useState } from "react";
+import Layout from "./components/Layout/Layout";
+import axios from "axios";
 
 function App() {
+  // Достаем токен пользовотеля
+  const token = JSON.parse(localStorage.getItem("token"));
+
+  // Данные пользователя
+  const [userData, setUserData] = useState({});
+
+  // Отправляет get запрос
+  const getUser = async () => {
+    try {
+      setIsLoading(false);
+      await axios
+        .get("http://localhost:8080/profile", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => setUserData(res.data.data));
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(true);
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
   // Это состояние загрузки
   const [isLoading, setIsLoading] = useState(true);
 
@@ -20,23 +47,6 @@ function App() {
     }
   };
 
-  // Это состояние проверки пользователя
-  const [checkUser, setCheckUser] = useState(false);
-
-  const navigate = useNavigate();
-
-  // Проверка пользователя
-  useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("token"));
-    if (!!token) {
-      setCheckUser(false);
-      return navigate("/");
-    } else {
-      setCheckUser(true);
-      return navigate("/register");
-    }
-  }, [checkUser]);
-
   return (
     <AddContext.Provider
       value={{
@@ -44,14 +54,23 @@ function App() {
         setIsLoading,
         type,
         passwordHide,
+        getUser,
+        userData,
       }}
     >
-      <Routes>
-        <Route path="/register" element={<SignUp />} />
-        <Route path="/login" element={<SignIn />} />
-        <Route path="/" element={<Profile />} />
-        <Route path="*" element={<h1>ERROR 404</h1>} />
-      </Routes>
+      <Layout>
+        <Routes>
+          {!!token ? (
+            <Route path="/" element={<Profile />} />
+          ) : (
+            <>
+              <Route path="/register" element={<SignUp />} />
+              <Route path="/login" element={<SignIn />} />
+            </>
+          )}
+          <Route path="*" element={<h1 className="error">ERROR 404</h1>} />
+        </Routes>
+      </Layout>
     </AddContext.Provider>
   );
 }

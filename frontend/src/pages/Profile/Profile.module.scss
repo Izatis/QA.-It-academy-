@@ -1,6 +1,5 @@
 .profile_main {
   background: #ffffff;
-  margin-top: 81px;
   .profile_body {
     max-width: 1440px;
     height: 100vh;
@@ -12,7 +11,7 @@
     .profile_content {
       max-width: 800px;
       position: relative;
-      margin: 85px auto 137px auto;
+      margin: 85px auto auto auto;
       .avatar {
         position: absolute;
         top: -135px;
@@ -28,7 +27,7 @@
         justify-content: space-between;
         .name_email h1,
         p {
-          font-family: "Inter";
+          font-family: "Inter", sans-serif;
           font-style: normal;
         }
 
@@ -64,7 +63,7 @@
       .text {
         max-width: 600px;
         p {
-          font-family: "Inter";
+          font-family: "Inter", sans-serif;
           font-style: normal;
           font-weight: 400;
           font-size: 16px;

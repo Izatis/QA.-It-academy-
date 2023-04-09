@@ -1,37 +1,45 @@
-import React from "react";
+import React, { useContext } from "react";
 import s from "./Header.module.scss";
 import logo from "../../assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import MyButton from "../MUI/Buttons/MyButton/MyButton";
+import { AddContext } from "../../pages/AddContext/AddContext";
 
-const Header = ({ userData }) => {
+const Header = () => {
   const navigate = useNavigate();
+
+  const { userData } = useContext(AddContext);
 
   // Достаем токен пользовотеля
   const token = JSON.parse(localStorage.getItem("token"));
   return (
     <div className={s.header_container}>
       <header>
-        <div className={s.logo_text}>
-          {!!token ? (
-            <Link to={"/"}>
-              <img src={logo} alt="logo" />
-            </Link>
-          ) : (
+        {!!token ? (
+          <Link to={"/"} className={s.logo_text}>
             <img src={logo} alt="logo" />
-          )}
-          <span>
-            Разрабатываем и запускаем <br />
-            сложные веб проекты
-          </span>
-        </div>
+            <span>
+              Разрабатываем и запускаем <br />
+              сложные веб проекты
+            </span>
+          </Link>
+        ) : (
+          <div className={s.logo_text}>
+            {" "}
+            <img src={logo} alt="logo" />
+            <span>
+              Разрабатываем и запускаем <br />
+              сложные веб проекты
+            </span>
+          </div>
+        )}
 
         {/* В зависимости от токена изменяем кнопку на имю и на логотип */}
         {!!token ? (
-          <div className={s.userName_avatar}>
-            <span className={s.userName}>{userData.username}</span>
+          <Link to={"/"} className={s.name_avatar}>
+            <span className={s.name}>{userData.username}</span>
             <img className={s.avatar} src={userData.avatar} alt="avatar" />
-          </div>
+          </Link>
         ) : (
           <MyButton
             onClick={() => navigate("/login")}

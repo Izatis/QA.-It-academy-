@@ -15,33 +15,12 @@ const Profile = () => {
   // Это состояние модалки
   const [active, setActive] = useState(false);
 
-  // Данные пользователя
-  const [userData, setUserData] = useState({});
+  // ------------------------------------------------------
 
-  // Здесь я достаю состояние загрузки, с помощи хука useContext()
-  const { isLoading, setIsLoading } = useContext(AddContext);
+  // Здесь я достаю состояние загрузку, (общий)
+  const { isLoading } = useContext(AddContext);
 
-  // Достаем токен пользователя
-  const token = JSON.parse(localStorage.getItem("token"));
-
-  // Отправляет get запрос
-  const getUser = async () => {
-    try {
-      setIsLoading(false);
-      await axios
-        .get("http://localhost:8080/profile", {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => setUserData(res.data.data));
-    } catch (error) {
-      console.log(error);
-    }
-    setIsLoading(true);
-  };
-
-  useEffect(() => {
-    getUser();
-  }, []);
+  const { userData } = useContext(AddContext);
 
   const navigate = useNavigate();
 
@@ -53,7 +32,6 @@ const Profile = () => {
 
   return (
     <div className={s.profile_main}>
-      <Header userData={userData} />
       <div className={s.profile_body}>
         <img className={s.cover_first} src={cover} alt="cover" />
         <div className={s.cover_second}></div>
@@ -116,7 +94,6 @@ const Profile = () => {
           active={active}
           setActive={setActive}
           userData={userData}
-          setUserData={setUserData}
         />
       </div>
     </div>

@@ -28,19 +28,27 @@
 
       span {
         text-align: start;
-        font-family: "Inter";
+        font-family: "Inter", sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
         line-height: 160%;
+        color: #000000;
       }
     }
 
-    .userName_avatar {
+    .name_avatar {
       display: flex;
       align-items: center;
       gap: 20px;
-      .userName {
+      .name {
+        text-align: start;
+        font-family: "Inter", sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 160%;
+        color: #000000;
       }
 
       .avatar {
