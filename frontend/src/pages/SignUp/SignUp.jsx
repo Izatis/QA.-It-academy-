@@ -16,8 +16,8 @@ const SignUp = () => {
   // Данные пользователя для регистрации
   const [userRegister, setUserRegister] = useState({
     username: "test",
-    email: "",
-    password: "123456",   
+    email: "test@gmail.com",
+    password: "123456",
   });
 
   // Здесь я достаю состояние загрузку, (общий)
@@ -133,7 +133,7 @@ const SignUp = () => {
               ""
             )}
 
-            {/* Здесь проверяется присутствие сообщения ошибки */}
+            {/* Здесь проверяется присутствие сообщения ошибки в email*/}
             {errorMessage && (
               <div className={s.error_message}>
                 <p>{errorMessage}</p>

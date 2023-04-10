@@ -5,6 +5,7 @@ import edit from "../../assets/edit.png";
 import exit from "../../assets/exit.png";
 import { useNavigate } from "react-router-dom";
 import { AddContext } from "../AddContext/AddContext";
+import useBodyScrollLock from "../../hooks/useBodyScrollLock";
 
 import MyButton from "../../components/MUI/Buttons/MyButton/MyButton";
 import Modal from "../../components/Modal/Modal";
@@ -28,8 +29,17 @@ const Profile = () => {
 
   // ------------------------------------------------------
 
-  // Это состояние модалки
+  // Состояние - для модалки
   const [active, setActive] = useState(false);
+
+  // Состояние - для запрета прокрутки когда модалка открыто
+  const [isLocked, setIsLocked] = useBodyScrollLock();
+
+  // Function - для active и isLocked
+  const handleClick = () => {
+    setActive(!active);
+    setIsLocked(!isLocked);
+  };
 
   return (
     <div className={s.profile_main}>
@@ -47,7 +57,7 @@ const Profile = () => {
                 <p>{userData.email}</p>
               </div>
               <MyButton
-                onClick={() => setActive(true)}
+                onClick={handleClick}
                 style={{
                   maxWidth: 200,
                   color: "#000000",

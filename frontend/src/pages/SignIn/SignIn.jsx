@@ -101,7 +101,7 @@ const SignIn = () => {
               ""
             )}
 
-            {/* Здесь проверяется присутствие сообщения ошибки в email*/}
+            {/* Здесь проверяется присутствие сообщения ошибки в email */}
             {errorMessage && (
               <div className={s.error_message}>
                 <p>{errorMessage}</p>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { AddContext } from "./pages/AddContext/AddContext";
 import axios from "axios";
 
@@ -33,11 +33,13 @@ function App() {
     }
     setIsLoading(true);
   };
+  
+  const location = useLocation()
 
   // Отправляет get запрос при каждом изменении localStorage
   useEffect(() => {
     getUser();
-  }, [token]);
+  }, [location.pathname === '/']);
 
   //  Скрытие пароля
   const [type, setType] = useState("password");
