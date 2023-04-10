@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
 import s from "./Profile.module.scss";
-import cover from "../../assets/cover.png";
-import edit from "../../assets/edit.png";
-import exit from "../../assets/exit.png";
 import { useNavigate } from "react-router-dom";
 import { AddContext } from "../AddContext/AddContext";
 import useBodyScrollLock from "../../hooks/useBodyScrollLock";
 
+import cover from "../../assets/cover.png";
+import edit from "../../assets/edit.png";
+import exit from "../../assets/exit.png";
 import MyButton from "../../components/MUI/Buttons/MyButton/MyButton";
 import Modal from "../../components/Modal/Modal";
 import Loading from "../../components/Loading/Loading";
@@ -30,14 +30,14 @@ const Profile = () => {
   // ------------------------------------------------------
 
   // Состояние - для модалки
-  const [active, setActive] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   // Состояние - для запрета прокрутки когда модалка открыто
   const [isLocked, setIsLocked] = useBodyScrollLock();
 
-  // Function - для active и isLocked
+  // Function - для showModal и isLocked
   const handleClick = () => {
-    setActive(!active);
+    setShowModal(!showModal);
     setIsLocked(!isLocked);
   };
 
@@ -101,7 +101,11 @@ const Profile = () => {
             <Loading />
           </div>
         )}
-        <Modal active={active} setActive={setActive} userData={userData} />
+        <Modal
+          showModal={showModal}
+          handleClick={handleClick}
+          userData={userData}
+        />
       </div>
     </div>
   );

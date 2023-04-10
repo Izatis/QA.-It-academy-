@@ -1,14 +1,14 @@
 import React, { useContext, useState } from "react";
 import s from "./Modal.module.scss";
+import { AddContext } from "../../pages/AddContext/AddContext";
 import classNames from "classnames";
 import axios from "axios";
 
 import MyInput from "../MUI/MyInput/MyInput";
 import MyButton from "../MUI/Buttons/MyButton/MyButton";
-import { AddContext } from "../../pages/AddContext/AddContext";
 import Loading from "../Loading/Loading";
 
-const Modal = ({ active, setActive }) => {
+const Modal = ({ showModal, handleClick }) => {
   // Данные пользователя для редактирования
   const [changeUser, setChangeUser] = useState({
     username: "",
@@ -34,6 +34,7 @@ const Modal = ({ active, setActive }) => {
       setErrorMessage("Разрешены только адреса Gmail или Mail.ru");
     } else {
       setIsLoading(false);
+      setErrorMessage("");
       try {
         // Достаем токен пользовотеля
         const token = JSON.parse(localStorage.getItem("token"));
@@ -53,6 +54,7 @@ const Modal = ({ active, setActive }) => {
         });
       } catch (error) {
         console.log(error.response.data.error);
+        setErrorMessage(error.response.data.error);
       }
       setIsLoading(true);
     }
@@ -60,7 +62,9 @@ const Modal = ({ active, setActive }) => {
 
   return (
     <div
-      className={active ? classNames(s.modal, s.active) : classNames(s.modal)}
+      className={
+        showModal ? classNames(s.modal, s.show_modal) : classNames(s.modal)
+      }
     >
       <div className={s.modal_content}>
         <h1>Редактировать профиль</h1>
@@ -132,7 +136,7 @@ const Modal = ({ active, setActive }) => {
           </div>
           <div className={s.buttons}>
             <MyButton
-              onClick={() => setActive(false)}
+              onClick={handleClick}
               style={{ color: "#000000", border: "1px solid #D5D5D5" }}
             >
               Отмена

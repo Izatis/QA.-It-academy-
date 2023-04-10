@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import { AddContext } from "./pages/AddContext/AddContext";
 import axios from "axios";
 
@@ -10,15 +10,25 @@ import Profile from "./pages/Profile/Profile";
 import Layout from "./components/Layout/Layout";
 
 function App() {
+  const navigate = useNavigate();
+  // Ответвление
+  useEffect(() => {
+    if (!!token) {
+      navigate("/");
+    } else {
+      navigate("/register");
+    }
+  }, []);
+
   // Данные пользователя
   const [userData, setUserData] = useState({});
-  
+
   // Это состояние загрузки
   const [isLoading, setIsLoading] = useState(true);
-  
+
   // Достаем токен пользовотеля
   const token = JSON.parse(localStorage.getItem("token"));
-  
+
   // Отправляет get запрос
   const getUser = async () => {
     try {
@@ -33,13 +43,13 @@ function App() {
     }
     setIsLoading(true);
   };
-  
-  const location = useLocation()
+
+  const location = useLocation();
 
   // Отправляет get запрос при каждом изменении localStorage
   useEffect(() => {
     getUser();
-  }, [location.pathname === '/']);
+  }, [location.pathname === "/"]);
 
   //  Скрытие пароля
   const [type, setType] = useState("password");
@@ -65,14 +75,9 @@ function App() {
     >
       <Layout>
         <Routes>
-          {!!token ? (
-            <Route path="/" element={<Profile />} />
-          ) : (
-            <>
-              <Route path="/register" element={<SignUp />} />
-              <Route path="/login" element={<SignIn />} />
-            </>
-          )}
+          <Route path="/" element={<Profile />} />
+          <Route path="/register" element={<SignUp />} />
+          <Route path="/login" element={<SignIn />} />
           <Route path="*" element={<h1 className="error_page">ERROR 404</h1>} />
         </Routes>
       </Layout>

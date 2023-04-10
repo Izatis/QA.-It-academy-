@@ -78,12 +78,13 @@
   }
 }
 
+.modal.show_modal {
+  display: flex;
+}
+
 @media (max-width: 800px) {
   .modal {
     background: none;
   }
 }
 
-.modal.active {
-  display: flex;
-}

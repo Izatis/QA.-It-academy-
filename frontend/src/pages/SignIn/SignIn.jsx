@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
 import s from "./SignIn.module.scss";
-import email from "../../assets/email.png";
-import password from "../../assets/password.png";
-import eye from "../../assets/eye.png";
 import { useNavigate } from "react-router-dom";
 import { AddContext } from "../AddContext/AddContext";
 import axios from "axios";
 
+import email from "../../assets/email.png";
+import password from "../../assets/password.png";
+import eye from "../../assets/eye.png";
 import MyInput from "../../components/MUI/MyInput/MyInput";
 import MyButton from "../../components/MUI/Buttons/MyButton/MyButton";
 import Loading from "../../components/Loading/Loading";
@@ -42,6 +42,7 @@ const SignIn = () => {
         setErrorMessage("Разрешены только адреса Gmail или Mail.ru");
       } else {
         setIsLoading(false);
+        setErrorMessage("");
         try {
           await axios
             .post("http://localhost:8080/login", userLogin)
