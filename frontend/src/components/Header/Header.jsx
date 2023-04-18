@@ -16,10 +16,10 @@ const Header = () => {
   const token = JSON.parse(localStorage.getItem("token"));
   
   return (
-    <div className={s.header_container}>
-      <header>
+    <div className={s.container}>
+      <header className={s.header}>
         {!!token ? (
-          <Link to={"/"} className={s.logo_text}>
+          <Link to={"/"} className={s.header__title}>
             <img src={logo} alt="logo" />
             <span>
               Разрабатываем и запускаем <br />
@@ -27,7 +27,7 @@ const Header = () => {
             </span>
           </Link>
         ) : (
-          <div className={s.logo_text}>
+          <div className={s.header__title}>
             <img src={logo} alt="logo" />
             <span>
               Разрабатываем и запускаем <br />
@@ -38,9 +38,9 @@ const Header = () => {
 
         {/* В зависимости от токена изменяем кнопку на имю и на логотип */}
         {!!token ? (
-          <Link to={"/"} className={s.name_avatar}>
-            <span className={s.name}>{userData.username}</span>
-            <img className={s.avatar} src={userData.avatar} alt="avatar" />
+          <Link to={"/"} className={s.user}>
+            <span className={s.user__name}>{userData.username}</span>
+            <img className={s.user__avatar} src={userData.avatar} alt="avatar" />
           </Link>
         ) : (
           <MyButton

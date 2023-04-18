@@ -42,17 +42,17 @@ const Profile = () => {
   };
 
   return (
-    <div className={s.profile_main}>
-      <div className={s.profile_body}>
-        <img className={s.cover_first} src={cover} alt="cover" />
-        <div className={s.cover_second}></div>
+    <div className={s.profile}>
+      <div className={s.profile__body}>
+        <img className={s.coverFirst} src={cover} alt="cover" />
+        <div className={s.coverSecond}></div>
         {isLoading ? (
-          <div className={s.profile_content}>
+          <div className={s.profile__content}>
             <span className={s.avatar}>
               <img src={userData.avatar} alt="avatar" />
             </span>
             <div className={s.container}>
-              <div className={s.name_email}>
+              <div className={s.name}>
                 <h1>{userData.username}</h1>
                 <p>{userData.email}</p>
               </div>
@@ -64,7 +64,7 @@ const Profile = () => {
                   border: "1px solid #D5D5D5",
                 }}
               >
-                <span className={s.edit_img}>
+                <span className={s.edit}>
                   <img src={edit} alt="edit" />
                 </span>
                 Редактировать
@@ -90,14 +90,14 @@ const Profile = () => {
                 marginTop: 60,
               }}
             >
-              <span className={s.exit_img}>
+              <span className={s.logOut}>
                 <img src={exit} alt="exit" />
               </span>
               Выйти
             </MyButton>
           </div>
         ) : (
-          <div className={s.center_loading}>
+          <div className={s.loading}>
             <Loading />
           </div>
         )}

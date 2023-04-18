@@ -75,11 +75,11 @@ const SignIn = () => {
   const { type, passwordHide } = useContext(AddContext);
 
   return (
-    <section className={s.sign_in_main}>
+    <section className={s.signIn}>
       {isLoading ? (
         <>
           <h1>Вход</h1>
-          <form onSubmit={handleSubmit} className={s.inputs_btn}>
+          <form onSubmit={handleSubmit} className={s.signIn__form}>
             <MyInput
               value={userLogin.email}
               onChange={(e) =>
@@ -88,14 +88,14 @@ const SignIn = () => {
               type="email"
               placeholder="E-mail"
             >
-              <span className={s.input_icon}>
+              <span className={s.inputIcon}>
                 <img src={email} alt={"email"} />
               </span>
             </MyInput>
 
             {/* Здесь проверяется присутствие поли в инпуте */}
             {error && userLogin.email.length <= 0 ? (
-              <div className={s.error_message}>
+              <div className={s.error}>
                 <p>Введите email!</p>
               </div>
             ) : (
@@ -104,7 +104,7 @@ const SignIn = () => {
 
             {/* Здесь проверяется присутствие сообщения ошибки в email */}
             {errorMessage && (
-              <div className={s.error_message}>
+              <div className={s.error}>
                 <p>{errorMessage}</p>
               </div>
             )}
@@ -118,17 +118,17 @@ const SignIn = () => {
                 setUserLogin({ ...userLogin, password: e.target.value })
               }
             >
-              <span className={s.input_icon}>
+              <span className={s.inputIcon}>
                 <img src={password} alt={"password"} />
               </span>
-              <span className={s.hide_password} onClick={passwordHide}>
+              <span className={s.hidePasswordIcon} onClick={passwordHide}>
                 <img src={eye} alt="eye" />
               </span>
             </MyInput>
 
             {/* Здесь проверяется присутствие поли в инпуте */}
             {error && userLogin.password.length <= 0 ? (
-              <div className={s.error_message}>
+              <div className={s.error}>
                 <p>Введите пароль!</p>
               </div>
             ) : (
@@ -148,7 +148,7 @@ const SignIn = () => {
                 Войти
               </MyButton>
             ) : (
-              <MyButton className={s.not_active} type="submit">
+              <MyButton className={s.notActiveBtn} type="submit">
                 Войти
               </MyButton>
             )}

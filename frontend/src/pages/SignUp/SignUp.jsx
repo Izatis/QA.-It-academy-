@@ -84,11 +84,11 @@ const SignUp = () => {
   const { type, passwordHide } = useContext(AddContext);
 
   return (
-    <div className={s.sign_up_main}>
+    <div className={s.signUp}>
       {isLoading ? (
         <>
           <h1>Регистрация</h1>
-          <form onSubmit={handleSubmit} className={s.inputs_btn}>
+          <form onSubmit={handleSubmit} className={s.signUp__form}>
             <MyInput
               type="text"
               placeholder="Имя"
@@ -98,14 +98,14 @@ const SignUp = () => {
                 setUserRegister({ ...userRegister, username: e.target.value });
               }}
             >
-              <span className={s.input_icon}>
+              <span className={s.inputIcon}>
                 <img src={user} alt={"user"} />
               </span>
             </MyInput>
 
             {/* Здесь проверяется присутствие поли в инпуте */}
             {error && userRegister.username.length <= 0 ? (
-              <div className={s.error_message}>
+              <div className={s.error}>
                 <p>Введите имю!</p>
               </div>
             ) : (
@@ -120,14 +120,14 @@ const SignUp = () => {
                 setUserRegister({ ...userRegister, email: e.target.value });
               }}
             >
-              <span className={s.input_icon}>
+              <span className={s.inputIcon}>
                 <img src={email} alt={"email"} />
               </span>
             </MyInput>
 
             {/* Здесь проверяется присутствие поли в инпуте */}
             {error && userRegister.email.length <= 0 ? (
-              <div className={s.error_message}>
+              <div className={s.error}>
                 <p>Введите e-mail!</p>
               </div>
             ) : (
@@ -136,7 +136,7 @@ const SignUp = () => {
 
             {/* Здесь проверяется присутствие сообщения ошибки в email*/}
             {errorMessage && (
-              <div className={s.error_message}>
+              <div className={s.error}>
                 <p>{errorMessage}</p>
               </div>
             )}
@@ -150,17 +150,17 @@ const SignUp = () => {
                 setUserRegister({ ...userRegister, password: e.target.value });
               }}
             >
-              <span className={s.input_icon}>
+              <span className={s.inputIcon}>
                 <img src={password} alt={"password"} />
               </span>
-              <span className={s.hide_password} onClick={passwordHide}>
+              <span className={s.hidePasswordIcon} onClick={passwordHide}>
                 <img src={eye} alt="eye" />
               </span>
             </MyInput>
 
             {/* Здесь проверяется присутствие поли в инпуте */}
             {error && userRegister.password.length <= 0 ? (
-              <div className={s.error_message}>
+              <div className={s.error}>
                 <p>Введите пароль!</p>
               </div>
             ) : (
@@ -182,7 +182,7 @@ const SignUp = () => {
                 Создать аккаунт
               </MyButton>
             ) : (
-              <MyButton className={s.not_active} type="submit">
+              <MyButton className={s.notActiveBtn} type="submit">
                 Создать аккаунт
               </MyButton>
             )}

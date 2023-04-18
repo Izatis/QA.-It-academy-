@@ -62,15 +62,14 @@ const Modal = ({ showModal, handleClick }) => {
 
   return (
     <div
-      className={
-        showModal ? classNames(s.modal, s.show_modal) : classNames(s.modal)
-      }
+      className={showModal ? classNames(s.modal, s.show) : classNames(s.modal)}
+      onClick={handleClick}
     >
-      <div className={s.modal_content}>
+      <div className={s.modal__content} onClick={(e) => e.stopPropagation()}>
         <h1>Редактировать профиль</h1>
 
-        <form onSubmit={handleSubmit}>
-          <div className={s.container}>
+        <form onSubmit={handleSubmit} className={s.form}>
+          <div className={s.form__body}>
             {isLoading ? (
               <>
                 <label htmlFor="text">
@@ -100,7 +99,7 @@ const Modal = ({ showModal, handleClick }) => {
 
                 {/* Здесь проверяется присутствие сообщения ошибки в email*/}
                 {errorMessage && (
-                  <div className={s.error_message}>
+                  <div className={s.error}>
                     <p>{errorMessage}</p>
                   </div>
                 )}
@@ -134,7 +133,7 @@ const Modal = ({ showModal, handleClick }) => {
               </div>
             )}
           </div>
-          <div className={s.buttons}>
+          <div className={s.btns}>
             <MyButton
               onClick={handleClick}
               style={{ color: "#000000", border: "1px solid #D5D5D5" }}

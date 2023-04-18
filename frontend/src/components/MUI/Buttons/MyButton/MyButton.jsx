@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 
 const MyButton = ({ children, ...props }) => {
   return (
-    <Button className="my_button" {...props}>
+    <Button className="my-button" {...props}>
       {children}
     </Button>
   );

@@ -1,4 +1,4 @@
-.sign_up_main {
+.signUp {
   display: flex;
   flex-direction: column;
   max-width: 400px;
@@ -17,7 +17,7 @@
     line-height: 140%;
   }
 
-  .inputs_btn {
+  .signUp__form {
     width: 100%;
     position: relative;
     display: flex;
@@ -25,7 +25,7 @@
     gap: 15px;
     margin: 0 auto;
 
-    .input_icon {
+    .inputIcon {
       margin: 0 10px 0 20px;
 
       img {
@@ -35,7 +35,7 @@
       }
     }
 
-    .hide_password {
+    .hidePasswordIcon {
       position: absolute;
       right: 18.75px;
 
@@ -47,7 +47,7 @@
       }
     }
 
-    .error_message {
+    .error {
       p {
         font-weight: 400;
         font-size: 15px;
@@ -57,7 +57,7 @@
       }
     }
 
-    .not_active {
+    .notActiveBtn {
       height: 50px !important;
       background: #d5d5d5 !important;
       border-radius: 5px !important;
@@ -74,7 +74,7 @@
 }
 
 @media (max-width: 500px) {
-  .signUp_main {
+  .signUp {
     border: none;
     margin: 100px auto;
   }

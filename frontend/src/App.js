@@ -14,9 +14,9 @@ function App() {
   // Ответвление
   useEffect(() => {
     if (!!token) {
-      navigate("/");
+      return navigate("/");
     } else {
-      navigate("/register");
+      return navigate("/register");
     }
   }, []);
 

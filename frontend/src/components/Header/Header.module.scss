@@ -1,10 +1,10 @@
-.header_container {
+.container {
   width: 100%;
   background: #ffffff;
   position: fixed;
   top: 0;
 
-  header {
+  .header {
     max-width: 1440px;
     height: 80px;
     display: flex;
@@ -15,7 +15,7 @@
     padding-left: 20px;
     padding-right: 29.5px;
 
-    .logo_text {
+    .header__title {
       width: 350px;
       display: flex;
       justify-content: space-around;
@@ -37,11 +37,11 @@
       }
     }
 
-    .name_avatar {
+    .user {
       display: flex;
       align-items: center;
       gap: 20px;
-      .name {
+      .user__name {
         text-align: start;
         font-family: "Inter", sans-serif;
         font-style: normal;
@@ -51,7 +51,7 @@
         color: #000000;
       }
 
-      .avatar {
+      .user__avatar {
         width: max-content;
         height: 50px;
         border-radius: 50%;
@@ -59,7 +59,7 @@
     }
 
     @media (max-width: 500px) {
-      .logo_text {
+      .header__title {
         justify-content: start;
 
         span {
