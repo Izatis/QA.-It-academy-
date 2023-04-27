@@ -88,7 +88,7 @@ const SignUp = () => {
       {isLoading ? (
         <>
           <h1>Регистрация</h1>
-          <form onSubmit={handleSubmit} className={s.signUp__form}>
+          <form className={s.signUp__form} onSubmit={handleSubmit}>
             <MyInput
               type="text"
               placeholder="Имя"
@@ -134,7 +134,7 @@ const SignUp = () => {
               ""
             )}
 
-            {/* Здесь проверяется присутствие сообщения ошибки в email*/}
+            {/* Здесь проверяется сообщения ошибки для email инпута, и для сообщения ошибки от сервера */}
             {errorMessage && (
               <div className={s.error}>
                 <p>{errorMessage}</p>
@@ -171,18 +171,11 @@ const SignUp = () => {
             {!!userRegister.username.length &&
             !!userRegister.email.length &&
             !!userRegister.password.length ? (
-              <MyButton
-                type="submit"
-                style={{
-                  height: 50,
-                  background: "#000000",
-                  color: "#FFFFFF",
-                }}
-              >
+              <MyButton type="submit" className={s.enter}>
                 Создать аккаунт
               </MyButton>
             ) : (
-              <MyButton className={s.notActiveBtn} type="submit">
+              <MyButton className={s.enter} disabled>
                 Создать аккаунт
               </MyButton>
             )}

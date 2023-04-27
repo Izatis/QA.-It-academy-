@@ -1,0 +1,27 @@
+button {
+  width: 100% !important;
+  display: flex;
+  align-items: center;
+  gap: 13.1px;
+  border-radius: 5px !important;
+  font-family: "Inter", sans-serif !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  line-height: 160% !important;
+  cursor: pointer !important;
+}
+
+button:disabled {
+  height: 50px !important;
+  background: #d5d5d5 !important;
+  border-radius: 5px !important;
+  font-family: "Inter", sans-serif !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  line-height: 160% !important;
+  color: #f3f3f3 !important;
+  transition: 0.3s !important;
+  cursor: default;
+}

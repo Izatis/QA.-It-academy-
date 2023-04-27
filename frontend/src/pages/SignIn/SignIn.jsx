@@ -79,7 +79,7 @@ const SignIn = () => {
       {isLoading ? (
         <>
           <h1>Вход</h1>
-          <form onSubmit={handleSubmit} className={s.signIn__form}>
+          <form className={s.signIn__form} onSubmit={handleSubmit}>
             <MyInput
               value={userLogin.email}
               onChange={(e) =>
@@ -102,7 +102,7 @@ const SignIn = () => {
               ""
             )}
 
-            {/* Здесь проверяется присутствие сообщения ошибки в email */}
+            {/* Здесь проверяется сообщения ошибки для email инпута, и для сообщения ошибки от сервера */}
             {errorMessage && (
               <div className={s.error}>
                 <p>{errorMessage}</p>
@@ -139,16 +139,12 @@ const SignIn = () => {
             {!!userLogin.email.length && !!userLogin.password.length ? (
               <MyButton
                 type="submit"
-                style={{
-                  height: 50,
-                  background: "#000000",
-                  color: "#FFFFFF",
-                }}
+                className={s.enter}
               >
                 Войти
               </MyButton>
             ) : (
-              <MyButton className={s.notActiveBtn} type="submit">
+              <MyButton className={s.enter} disabled>
                 Войти
               </MyButton>
             )}
