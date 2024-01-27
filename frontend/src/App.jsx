@@ -4,13 +4,16 @@ import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import { AddContext } from "./pages/AddContext/AddContext";
 import axios from "axios";
 
-import SignUp from "./pages/SignUp/SignUp";
-import SignIn from "./pages/SignIn/SignIn";
+import Registration from "./pages/Registration/Registration";
+import Authorization from "./pages/Authorization/Authorization";
 import Profile from "./pages/Profile/Profile";
 import Layout from "./components/Layout/Layout";
 
 function App() {
   const navigate = useNavigate();
+  // Достаем токен пользовотеля
+  const token = JSON.parse(localStorage.getItem("token"));
+
   // Ответвление
   useEffect(() => {
     if (!!token) {
@@ -20,24 +23,24 @@ function App() {
     }
   }, []);
 
-  // Данные пользователя
+  // Состояния - для данных пользователя
   const [userData, setUserData] = useState({});
 
-  // Это состояние загрузки
+  // Состояния - для загрузки
   const [isLoading, setIsLoading] = useState(true);
 
-  // Достаем токен пользовотеля
-  const token = JSON.parse(localStorage.getItem("token"));
+  // Отправляет get запрос для получения пользователя
+  const BASE_URL = "http://localhost:8080";
 
-  // Отправляет get запрос
   const getUser = async () => {
     try {
       setIsLoading(false);
-      await axios
-        .get("http://localhost:8080/profile", {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => setUserData(res.data.data));
+      const { data } = await axios.get(BASE_URL + "/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Сохраняем данные пользователя
+      setUserData(data.data);
     } catch (error) {
       console.log(error);
     }
@@ -46,12 +49,12 @@ function App() {
 
   const location = useLocation();
 
-  // Отправляет get запрос при каждом изменении localStorage
+  // Отправляет get запрос при каждом изменении location
   useEffect(() => {
     getUser();
   }, [location.pathname === "/"]);
 
-  //  Скрытие пароля
+  // Скрытие пароля
   const [type, setType] = useState("password");
   const passwordHide = () => {
     if (type === "password") {
@@ -76,8 +79,8 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<Profile />} />
-          <Route path="/register" element={<SignUp />} />
-          <Route path="/login" element={<SignIn />} />
+          <Route path="/register" element={<Registration />} />
+          <Route path="/login" element={<Authorization />} />
           <Route path="*" element={<h1 className="error_page">ERROR 404</h1>} />
         </Routes>
       </Layout>

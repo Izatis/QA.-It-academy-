@@ -2,6 +2,7 @@
   width: 100%;
   background: #ffffff;
   position: fixed;
+  z-index: 10;
   top: 0;
 
   .header {
@@ -11,9 +12,9 @@
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid #e6e6e6;
+    padding: 0 29.5px 0 20px;
+    box-sizing: border-box;
     margin: 0 auto;
-    padding-left: 20px;
-    padding-right: 29.5px;
 
     .header__title {
       width: 350px;

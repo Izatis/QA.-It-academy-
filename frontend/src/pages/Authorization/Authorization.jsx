@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import s from "./SignIn.module.scss";
+import s from "./Authorization.module.scss";
 import { useNavigate } from "react-router-dom";
 import { AddContext } from "../AddContext/AddContext";
 import axios from "axios";
@@ -11,14 +11,14 @@ import MyInput from "../../components/MUI/MyInput/MyInput";
 import MyButton from "../../components/MUI/Buttons/MyButton/MyButton";
 import Loading from "../../components/Loading/Loading";
 
-const SignIn = () => {
-  // Данные пользователя для авторизации
+const Authorization = () => {
+  // Состояния - для данных пользователя авторизации
   const [userLogin, setUserLogin] = useState({
     email: "",
     password: "",
   });
 
-  // Здесь я достаю состояние загрузку, (общий)
+  // Состояние - для  загрузки, (общий)
   const { isLoading, setIsLoading } = useContext(AddContext);
 
   const navigate = useNavigate();
@@ -30,6 +30,9 @@ const SignIn = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   // Отправляем post запрос, и за одно проверяется пользователь и перенапраляется на профиль
+  const BASE_URL = "http://localhost:8080";
+
+  // Отправляем post запрос
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (userLogin.email.length === 0 || userLogin.password.length === 0) {
@@ -44,13 +47,12 @@ const SignIn = () => {
         setIsLoading(false);
         setErrorMessage("");
         try {
-          await axios
-            .post("http://localhost:8080/login", userLogin)
-            .then((response) =>
-              localStorage.setItem("token", JSON.stringify(response.data.token))
-            );
+          const { data } = await axios.post(BASE_URL + "/login", userLogin);
 
-          // Достаем токен пользовотеля
+          // Сохраняем токен пользователя
+          localStorage.setItem("token", JSON.stringify(data.token));
+
+          // Достаем токен пользователя
           const token = JSON.parse(localStorage.getItem("token"));
 
           if (!!token) {
@@ -75,11 +77,11 @@ const SignIn = () => {
   const { type, passwordHide } = useContext(AddContext);
 
   return (
-    <section className={s.signIn}>
+    <section className={s.authorization}>
       {isLoading ? (
         <>
           <h1>Вход</h1>
-          <form className={s.signIn__form} onSubmit={handleSubmit}>
+          <form className={s.authorization__form} onSubmit={handleSubmit}>
             <MyInput
               value={userLogin.email}
               onChange={(e) =>
@@ -98,9 +100,7 @@ const SignIn = () => {
               <div className={s.error}>
                 <p>Введите email!</p>
               </div>
-            ) : (
-              ""
-            )}
+            ) : null}
 
             {/* Здесь проверяется сообщения ошибки для email инпута, и для сообщения ошибки от сервера */}
             {errorMessage && (
@@ -131,20 +131,15 @@ const SignIn = () => {
               <div className={s.error}>
                 <p>Введите пароль!</p>
               </div>
-            ) : (
-              ""
-            )}
+            ) : null}
 
             {/* Это сравнение проверяет на содержания инпутов и изменяет кнопку */}
             {!!userLogin.email.length && !!userLogin.password.length ? (
-              <MyButton
-                type="submit"
-                className={s.enter}
-              >
+              <MyButton className={s.enter} type="submit">
                 Войти
               </MyButton>
             ) : (
-              <MyButton className={s.enter} disabled>
+              <MyButton className={s.disabled} type="submit">
                 Войти
               </MyButton>
             )}
@@ -157,4 +152,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default Authorization;

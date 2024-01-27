@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import s from "./SignUp.module.scss";
+import s from "./Registration.module.scss";
 import { useNavigate } from "react-router-dom";
 import { AddContext } from "../AddContext/AddContext";
 import axios from "axios";
@@ -12,15 +12,15 @@ import MyInput from "../../components/MUI/MyInput/MyInput";
 import MyButton from "../../components/MUI/Buttons/MyButton/MyButton";
 import Loading from "../../components/Loading/Loading";
 
-const SignUp = () => {
-  // Данные пользователя для регистрации
+const Registration = () => {
+  // Состояния - для данных пользователя регистрации
   const [userRegister, setUserRegister] = useState({
     username: "test",
     email: "test@gmail.com",
     password: "123456",
   });
 
-  // Здесь я достаю состояние загрузку, (общий)
+  // Состояние - для  загрузки, (общий)
   const { isLoading, setIsLoading } = useContext(AddContext);
 
   const navigate = useNavigate();
@@ -32,6 +32,9 @@ const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   // Отправляем post запрос,  и за одно проверяется, потом  создает пользователя и перенапраляется на профиль
+  const BASE_URL = "http://localhost:8080";
+
+  // Отправляем post запрос
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (
@@ -50,15 +53,18 @@ const SignUp = () => {
         setIsLoading(false);
         setErrorMessage("");
         try {
-          await axios
-            .post("http://localhost:8080/register", userRegister)
-            .then((response) =>
-              localStorage.setItem("token", JSON.stringify(response.data.token))
-            );
+          const { data } = await axios.post(
+            BASE_URL + "/register",
+            userRegister
+          );
+
+          // Сохраняем токен пользователя
+          localStorage.setItem("token", JSON.stringify(data.token));
 
           // Достаем токен пользовотеля
           const token = JSON.parse(localStorage.getItem("token"));
 
+          // Если есть токен то перенаправляем пользователя на профиль
           if (!!token) {
             navigate("/");
           }
@@ -67,8 +73,6 @@ const SignUp = () => {
             username: "",
             email: "",
             password: "",
-            avatar: "",
-            about: "",
           });
         } catch (error) {
           setErrorMessage(error.response.data.error);
@@ -84,11 +88,11 @@ const SignUp = () => {
   const { type, passwordHide } = useContext(AddContext);
 
   return (
-    <div className={s.signUp}>
+    <div className={s.registration}>
       {isLoading ? (
         <>
           <h1>Регистрация</h1>
-          <form className={s.signUp__form} onSubmit={handleSubmit}>
+          <form className={s.registration__form} onSubmit={handleSubmit}>
             <MyInput
               type="text"
               placeholder="Имя"
@@ -130,9 +134,7 @@ const SignUp = () => {
               <div className={s.error}>
                 <p>Введите e-mail!</p>
               </div>
-            ) : (
-              ""
-            )}
+            ) : null}
 
             {/* Здесь проверяется сообщения ошибки для email инпута, и для сообщения ошибки от сервера */}
             {errorMessage && (
@@ -163,19 +165,17 @@ const SignUp = () => {
               <div className={s.error}>
                 <p>Введите пароль!</p>
               </div>
-            ) : (
-              ""
-            )}
+            ) : null}
 
             {/* Это сравнение проверяет на содержания инпутов и изменяет кнопку */}
             {!!userRegister.username.length &&
             !!userRegister.email.length &&
             !!userRegister.password.length ? (
-              <MyButton type="submit" className={s.enter}>
+              <MyButton className={s.enter} type="submit">
                 Создать аккаунт
               </MyButton>
             ) : (
-              <MyButton className={s.enter} disabled>
+              <MyButton className={s.disabled} type="submit">
                 Создать аккаунт
               </MyButton>
             )}
@@ -188,4 +188,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Registration;

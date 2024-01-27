@@ -1,7 +1,5 @@
 .profile {
-  background: #ffffff;
-  .profile__body {
-    max-width: 1440px;
+      max-width: 1440px;
     height: 100vh;
     margin: 0 auto;
 
@@ -9,13 +7,19 @@
       width: 100%;
     }
 
+    .coverSecond{
+      display: none;
+    }
+
     .profile__content {
       max-width: 800px;
       position: relative;
       margin: 85px auto auto auto;
+
       .avatar {
         position: absolute;
         top: -135px;
+
         img {
           width: max-content;
           height: 100px;
@@ -26,6 +30,7 @@
         display: flex;
         align-items: baseline;
         justify-content: space-between;
+
         .name h1,
         p {
           font-family: "Inter", sans-serif;
@@ -78,12 +83,10 @@
       margin-top: 150px;
       text-align: center;
     }
-  }
 }
 
 @media (max-width: 850px) {
   .profile {
-    .profile__body {
       .coverFirst {
         display: none;
       }
@@ -99,16 +102,4 @@
       }
     }
   }
-}
 
-@media (max-width: 590px) {
-  .profile {
-    .profile__body {
-      .profile__content {
-        .container {
-          display: none;
-        }
-      }
-    }
-  }
-}

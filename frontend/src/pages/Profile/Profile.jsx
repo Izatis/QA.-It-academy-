@@ -15,7 +15,7 @@ const Profile = () => {
   // Данные пользователя
   const { userData, setUserData } = useContext(AddContext);
 
-  // Здесь я достаю состояние загрузку, (общий)
+  // Состояние - для  загрузки, (общий)
   const { isLoading } = useContext(AddContext);
 
   const navigate = useNavigate();
@@ -30,20 +30,19 @@ const Profile = () => {
   // ------------------------------------------------------
 
   // Состояние - для модалки
-  const [showModal, setShowModal] = useState(false);
+  const [activeModal, setActiveModal] = useState(false);
 
   // Состояние - для запрета прокрутки когда модалка открыто
   const [isLocked, setIsLocked] = useBodyScrollLock();
 
-  // Function - для showModal и isLocked
+  // Function - для activeModal и isLocked
   const handleClick = () => {
-    setShowModal(!showModal);
+    setActiveModal(!activeModal);
     setIsLocked(!isLocked);
   };
 
   return (
     <div className={s.profile}>
-      <div className={s.profile__body}>
         <img className={s.coverFirst} src={cover} alt="cover" />
         <div className={s.coverSecond}></div>
         {isLoading ? (
@@ -102,12 +101,11 @@ const Profile = () => {
           </div>
         )}
         <Modal
-          showModal={showModal}
+          activeModal={activeModal}
           handleClick={handleClick}
           userData={userData}
         />
       </div>
-    </div>
   );
 };
 

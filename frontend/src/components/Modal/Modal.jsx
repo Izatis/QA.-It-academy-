@@ -8,7 +8,7 @@ import MyInput from "../MUI/MyInput/MyInput";
 import MyButton from "../MUI/Buttons/MyButton/MyButton";
 import Loading from "../Loading/Loading";
 
-const Modal = ({ showModal, handleClick }) => {
+const Modal = ({ activeModal, handleClick }) => {
   // Данные пользователя для редактирования
   const [changeUser, setChangeUser] = useState({
     username: "",
@@ -17,7 +17,7 @@ const Modal = ({ showModal, handleClick }) => {
     avatar: "",
   });
 
-  // Здесь я достаю состояние загрузку, (общий)
+  // Состояние - для  загрузки, (общий)
   const { isLoading, setIsLoading } = useContext(AddContext);
 
   // Состояние - сообщения ошибки для email инпута, и для сообщения ошибки от сервера
@@ -43,17 +43,17 @@ const Modal = ({ showModal, handleClick }) => {
             Authorization: `Bearer ${token}`,
           },
         };
-        await axios
-          .patch("http://localhost:8080/profile/", changeUser, config)
-          .then((response) => console.log(response));
-        window.location.reload();
+        const { data } = await axios.patch(
+          "http://localhost:8080/profile/",
+          changeUser,
+          config
+        );
 
         setUserLogin({
           email: "",
           password: "",
         });
       } catch (error) {
-        console.log(error.response.data.error);
         setErrorMessage(error.response.data.error);
       }
       setIsLoading(true);
@@ -62,7 +62,9 @@ const Modal = ({ showModal, handleClick }) => {
 
   return (
     <div
-      className={showModal ? classNames(s.modal, s.show) : classNames(s.modal)}
+      className={
+        activeModal ? classNames(s.modal, s.active) : classNames(s.modal)
+      }
       onClick={handleClick}
     >
       <div className={s.modal__content} onClick={(e) => e.stopPropagation()}>
